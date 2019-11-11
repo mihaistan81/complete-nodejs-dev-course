@@ -1,0 +1,5 @@
+Pachete folosite din NPMJS.com
+- validator
+- chalk
+- nodemon
+- yargs
