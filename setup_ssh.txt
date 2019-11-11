@@ -1,0 +1,23 @@
+SVROLP00894+mihail.stan@SVROLP00894 MINGW64 ~
+$ mkdir .ssh
+
+SVROLP00894+mihail.stan@SVROLP00894 MINGW64 ~
+$ ssh-keygen -t rsa -b 4096 -C "mihai.stan@gmail.com"
+
+Press Enter for default values. This will create the id_rsa and id_rsa.pub files.
+
+SVROLP00894+mihail.stan@SVROLP00894 MINGW64 ~
+$ eval $(ssh-agent -s)
+Agent pid 679
+
+SVROLP00894+mihail.stan@SVROLP00894 MINGW64 ~
+$ ssh-add ~/.ssh/id_rsa
+Identity added: /c/Users/mihail.stan/.ssh/id_rsa (mihai.stan@gmail.com)
+
+
+SVROLP00894+mihail.stan@SVROLP00894 MINGW64 ~
+$ cat ~/.ssh/id_rsa.pub
+...........................
+
+SVROLP00894+mihail.stan@SVROLP00894 MINGW64 ~
+$ ssh -T git@github.com
