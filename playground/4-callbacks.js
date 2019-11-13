@@ -41,3 +41,20 @@ const add = (one, two, callback) => {
 add(1, 4, (sum) => {
     console.log(sum) // Should print: 5
 })
+
+//////////////// Callback vs Promises ////////////////////////
+
+const doWorkCallback = (callback) => {
+    setTimeout((error, result) => {
+        // callback('This is my error', undefined)
+        callback(undefined, [1, 4, 7])
+    }, 2000)
+}
+
+doWorkCallback((error, result) => {
+    if(error) {
+        return console.log(error)
+    }
+    
+    console.log(result)
+})
