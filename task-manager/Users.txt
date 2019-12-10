@@ -11,9 +11,9 @@
 }
 
 {
-	"name": "Mihai Stanislav",
+	"name": "Mihai",
 	"email": "mike@versatile.ro",
-	"password": "Test123()"
+	"password": "Test123#$"
 }
 
 {
