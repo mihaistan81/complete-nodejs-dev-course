@@ -1,0 +1,28 @@
+{
+	"name": "George",
+	"email": "george@example.com",
+	"password": "GeorgeAiVreaSaStii"
+}
+
+{
+	"name": "George",
+	"email": "george@example.com",
+	"password": "George123#$"
+}
+
+{
+	"name": "Mihai Stanislav",
+	"email": "mike@versatile.ro",
+	"password": "Test123()"
+}
+
+{
+	"name": "Mihaita",
+	"email": "mihaita@versatile.ro",
+	"password": "Test123&&"
+}
+
+Eat lunch
+What did you eat at lunch ?
+Fuse, fuse si se duse ?
+Am adaugat descriere 2
