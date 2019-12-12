@@ -2,6 +2,7 @@ const express = require('express')
 const User = require('../models/user')
 const auth = require('../middleware/auth')
 const multer = require('multer')
+const sharp = require('sharp')
 const router = new express.Router()
 
 router.post('/users', async (req, res) => {
@@ -96,7 +97,7 @@ router.delete('/users/me', auth, async (req, res) => {
 const upload_avatar = multer({ 
     //dest: 'avatars',
     limits: {
-        fileSize: 1000000
+        fileSize: 2000000
     },
     fileFilter(req, file, cb) {
         if(!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
@@ -108,27 +109,17 @@ const upload_avatar = multer({
 
 })
 router.post('/users/me/avatar', auth, upload_avatar.single('avatar'), async (req, res) => {
-    req.user.avatar = req.file.buffer
+    
+    const buffer = await sharp(req.file.buffer)
+        .resize({ width: 250, height: 250 })
+        .png()
+        .toBuffer()
+    req.user.avatar = buffer
     await req.user.save()
 
     res.send()
 }, (error, req, res, next) => {
     res.status(400).send({ error: error.message })
-})
-
-router.get('/users/:id/avatar', async (req, res) => {
-    try {
-        const user = await User.findById({ _id: req.params.id })
-
-        if(!user || !user.avatar) {
-            throw new Error('There is no user with this ID !')
-        }
-
-        res.set('Content-type', 'image/jpg')
-        res.send(user.avatar)
-    } catch(e) {
-        res.status(404).send(e)
-    }
 })
 
 router.delete('/users/me/avatar', auth, async (req, res) => {
@@ -138,6 +129,22 @@ router.delete('/users/me/avatar', auth, async (req, res) => {
     res.send()
 }, (error, req, res, next) => {
     res.status(404).send({ error: error.message })
+})
+
+router.get('/users/:id/avatar', async (req, res) => {
+    // http://localhost:3000/users/5df215e63a2518852c60a9e0/avatar
+    try {
+        const user = await User.findById({ _id: req.params.id })
+
+        if(!user || !user.avatar) {
+            throw new Error('There is no user with this ID !')
+        }
+
+        res.set('Content-type', 'image/png')
+        res.send(user.avatar)
+    } catch(e) {
+        res.status(404).send(e)
+    }
 })
 
 module.exports = router
