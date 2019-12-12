@@ -1,6 +1,7 @@
 const express = require('express')
 const User = require('../models/user')
 const auth = require('../middleware/auth')
+const multer = require('multer')
 const router = new express.Router()
 
 router.post('/users', async (req, res) => {
@@ -91,5 +92,52 @@ router.delete('/users/me', auth, async (req, res) => {
         res.status(500).send(err);
     }
 });
+
+const upload_avatar = multer({ 
+    //dest: 'avatars',
+    limits: {
+        fileSize: 1000000
+    },
+    fileFilter(req, file, cb) {
+        if(!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+            cb(new Error('You should only upload a image with extension jpg|jpeg|png files!'))
+        }
+
+        cb(undefined, true)
+    }
+
+})
+router.post('/users/me/avatar', auth, upload_avatar.single('avatar'), async (req, res) => {
+    req.user.avatar = req.file.buffer
+    await req.user.save()
+
+    res.send()
+}, (error, req, res, next) => {
+    res.status(400).send({ error: error.message })
+})
+
+router.get('/users/:id/avatar', async (req, res) => {
+    try {
+        const user = await User.findById({ _id: req.params.id })
+
+        if(!user || !user.avatar) {
+            throw new Error('There is no user with this ID !')
+        }
+
+        res.set('Content-type', 'image/jpg')
+        res.send(user.avatar)
+    } catch(e) {
+        res.status(404).send(e)
+    }
+})
+
+router.delete('/users/me/avatar', auth, async (req, res) => {
+    req.user.avatar = undefined
+    await req.user.save();
+
+    res.send()
+}, (error, req, res, next) => {
+    res.status(404).send({ error: error.message })
+})
 
 module.exports = router
