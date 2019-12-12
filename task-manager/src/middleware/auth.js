@@ -5,7 +5,7 @@ const auth = async (req, res, next) => {
     try {
         const token = req.header('Authorization').replace('Bearer ', '')
         //console.log(token)
-        const decoded = jwt.verify(token, 'vwddf234w46g4@7')
+        const decoded = jwt.verify(token, process.env.MONGODB_URL)
         const user = await User.findOne({ _id: decoded._id, 'tokens.token': token })
         
         if(!user) {

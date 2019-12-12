@@ -77,7 +77,7 @@ userSchema.methods.toJSON = function() {
 // accessible on the User instance object
 userSchema.methods.generateAuthToken = async function() {
     const user = this
-    const jwtToken = jwt.sign({ _id: user._id.toString() }, 'vwddf234w46g4@7')
+    const jwtToken = jwt.sign({ _id: user._id.toString() }, process.env.MONGODB_URL)
 
     user.tokens = user.tokens.concat({ token: jwtToken })
     await user.save()
